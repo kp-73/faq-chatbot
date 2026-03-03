@@ -1,30 +1,68 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const dialogflow = require('@google-cloud/dialogflow');
 const { v4: uuidv4 } = require('uuid');
-const path = require('path');
 
 const app = express();
-app.use(bodyParser.json());
-app.use(express.static('public')); // Serves your HTML/CSS
 
-// Replace with your Project ID from the JSON file
-const projectId = 'faq-bot-lldi'; 
-const sessionClient = new dialogflow.SessionsClient({
-    keyFilename: "./credentials.json"
+// Use modern JSON parser
+app.use(express.json());
+app.use(express.static('public'));
+
+// Root route (for testing deployment)
+app.get("/", (req, res) => {
+    res.send("FAQ Chatbot Server Running 🚀");
 });
 
+// ===== Dialogflow Setup =====
+const projectId = 'faq-bot-lldi';
+
+let sessionClient;
+
+try {
+    sessionClient = new dialogflow.SessionsClient({
+        credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS)
+    });
+} catch (error) {
+    console.error("Failed to load Google credentials:", error);
+}
+
+// ===== Chat Route =====
 app.post('/chat', async (req, res) => {
-    const sessionId = uuidv4();
-    const sessionPath = sessionClient.projectAgentSessionPath(projectId, sessionId);
+    try {
+        if (!req.body.message) {
+            return res.status(400).json({ error: "Message is required" });
+        }
 
-    const request = {
-        session: sessionPath,
-        queryInput: { text: { text: req.body.message, languageCode: 'en-US' } },
-    };
+        const sessionId = uuidv4();
+        const sessionPath = sessionClient.projectAgentSessionPath(projectId, sessionId);
 
-    const responses = await sessionClient.detectIntent(request);
-    res.send({ reply: responses[0].queryResult.fulfillmentText });
+        const request = {
+            session: sessionPath,
+            queryInput: {
+                text: {
+                    text: req.body.message,
+                    languageCode: 'en-US'
+                }
+            }
+        };
+
+        const responses = await sessionClient.detectIntent(request);
+
+        const reply =
+            responses[0].queryResult.fulfillmentText ||
+            "Sorry, I didn't understand that.";
+
+        res.json({ reply });
+
+    } catch (error) {
+        console.error("Dialogflow Error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+// ===== Start Server =====
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
