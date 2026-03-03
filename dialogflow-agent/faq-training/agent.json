@@ -1,0 +1,9 @@
+{
+  "description": "",
+  "language": "en",
+  "shortDescription": "",
+  "defaultTimezone": "America/New_York",
+  "disableInteractionLogs": false,
+  "disableStackdriverLogs": true,
+  "googleAssistant": {}
+}

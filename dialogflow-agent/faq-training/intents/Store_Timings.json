@@ -1,0 +1,27 @@
+{
+  "name": "Store_Timings",
+  "auto": true,
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "en",
+          "speech": [
+            "Our store is open from 10:00 AM to 8:00 PM, Monday to Saturday, and 11:00 AM to 6:00 PM on Sundays."
+          ]
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": []
+}

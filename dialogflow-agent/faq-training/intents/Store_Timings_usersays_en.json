@@ -1,0 +1,42 @@
+[
+  {
+    "data": [
+      {
+        "text": "What are your store timings?",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0
+  },
+  {
+    "data": [
+      {
+        "text": "When do you open?",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0
+  },
+  {
+    "data": [
+      {
+        "text": "What time does the store close today?",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0
+  },
+  {
+    "data": [
+      {
+        "text": "Are you open right now?",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0
+  }
+]
